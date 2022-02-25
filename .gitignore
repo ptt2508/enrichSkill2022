@@ -50,3 +50,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# cubeIDE output directories
+/cubeIde/stm32cube_project/Debug
+/cubeIde/stm32cube_project/Release
