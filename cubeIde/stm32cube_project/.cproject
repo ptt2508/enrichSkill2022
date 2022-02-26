@@ -51,6 +51,11 @@
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_gpio/inc"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_uart/inc"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_clock/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_i2c/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_timer/inc"/>
+									<listOptionValue builtIn="false" value="&quot;E:\thinh\workspace\enrichSkill\enrichSkill2022\cubeIde\external\freertos\cfg&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;E:\thinh\workspace\enrichSkill\enrichSkill2022\cubeIde\external\freertos\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;E:\thinh\workspace\enrichSkill\enrichSkill2022\cubeIde\external\freertos\portable\GCC\ARM_CM4F&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1636209349" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -76,6 +81,11 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1424770110" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.44710277.1994969825" name="sysmem.c" rcbsApplicability="disable" resourcePath="external/SDK/STM32F4xx_HAL_Core/src/sysmem.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1124511747.1785428492">
+						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1124511747.1785428492" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1124511747">
+							<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.423991012" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+						</tool>
+					</fileInfo>
 					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.44710277.1328696476" name="/" resourcePath="comps">
 						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.452859958" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug" unusedChildren="">
 							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.612468982.1689765465" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.612468982"/>
@@ -116,9 +126,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="SDK"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="comps"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="startup"/>
+						<entry excluding="SDK/STM32F4xx_HAL_Core/src/sysmem.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="external"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -174,6 +183,8 @@
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_gpio/inc"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_uart/inc"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_clock/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_i2c/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_timer/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.736516523" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

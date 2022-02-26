@@ -2,7 +2,7 @@
 #include "string.h"
 #include "enrichSkill_uart.h"
 #include "enrichSkill_gpio.h"
-
+#include "../../enrichSkill_timer/inc/enrichSkill_timer.h"
 #include "../../enrichSkill_clock/inc/enrichSkill_clock.h"
 
 /* Private typedef -----------------------------------------------------------*/
