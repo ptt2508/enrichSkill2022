@@ -1,14 +1,13 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ES_TIMER_H
-#define __ES_TIMER_H
+#ifndef __ES_SHELL_H
+#define __ES_SHELL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -16,9 +15,6 @@
 
 /* Exported functions prototypes ---------------------------------------------*/
 
-
 /* Private defines -----------------------------------------------------------*/
-void enrichSkill_timer_init();
 
-
-#endif /* __ES_TIMER_H */
+#endif /* __ES_SHELL_H */

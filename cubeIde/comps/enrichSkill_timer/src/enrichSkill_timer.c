@@ -1,4 +1,4 @@
-#include "../inc/enrichSkill_timer.h"
+#include "enrichSkill_timer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -9,3 +9,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
+void enrichSkill_timer_init()
+{
+	HAL_Delay(100);
+}

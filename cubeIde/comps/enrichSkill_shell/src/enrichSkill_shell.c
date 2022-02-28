@@ -1,4 +1,4 @@
-#include "enrichSkill_i2c.h"
+#include "enrichSkill_shell.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -8,6 +8,4 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-
 /* Private function prototypes -----------------------------------------------*/
-
