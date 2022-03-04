@@ -1,9 +1,11 @@
 #include <enrichSkill_main.h>
 #include "string.h"
+
 #include "enrichSkill_uart.h"
 #include "enrichSkill_gpio.h"
-
-#include "../../enrichSkill_clock/inc/enrichSkill_clock.h"
+#include "enrichSkill_timer.h"
+#include "enrichSkill_clock.h"
+#include "FreeRTOS.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef enum
@@ -38,13 +40,21 @@ static enrichSkillApp_Init_Stat_t enrichSkill_app_init(void);
  */
 int enrichSkill_main(void)
 {
+	BaseType_t taskStat = pdPASS;
+	/* Initialize system */
 	if (enrichSkill_app_init() == ENRICHSKILL_APP_INIT_FAIL)
 	{
 		sEnrichSkill_App_State = ENRICHSKILL_APP_ERROR;
 	}
-	/* Start */
+	/* Send welcome message */
 	enrichSkill_uart_send_msg((uint8_t*) &sWelcomeMsg[0u],
 			strlen((const char*) &sWelcomeMsg[0u]));
+	/* Register tasks */
+//	taskStat = xTaskCreate(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask);
+//	if (pdFAIL == taskStat)
+//	{
+//		enrichSKill_app_errorHandler();
+//	}
 	/* Infinite loop */
 	while (1)
 	{
@@ -101,6 +111,7 @@ static enrichSkillApp_Init_Stat_t enrichSkill_app_init(void)
 
 	/* Initialize all configured peripherals */
 	enrichSkill_gpio_init();
+	enrichSkill_timer_init();
 	if (enrichSkill_uart_init() == ENRICHSKILL_UART_FAIL)
 	{
 		retVal = ENRICHSKILL_APP_INIT_FAIL;

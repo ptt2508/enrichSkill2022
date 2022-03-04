@@ -31,19 +31,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>SDK</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/external/SDK</locationURI>
-		</link>
-		<link>
 			<name>comps</name>
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/comps</locationURI>
 		</link>
 		<link>
-			<name>startup</name>
+			<name>external</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/external/startup</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/external</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
