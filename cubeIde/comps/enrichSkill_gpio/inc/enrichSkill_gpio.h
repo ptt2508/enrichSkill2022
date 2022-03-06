@@ -21,6 +21,8 @@
  */
 void enrichSkill_gpio_init();
 
+void enrichSkill_gpio_led_hanlder(void * params);
+
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC

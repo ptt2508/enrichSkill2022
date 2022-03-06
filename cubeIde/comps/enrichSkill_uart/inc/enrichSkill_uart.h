@@ -15,6 +15,7 @@ typedef enum
 } enrichSkill_uart_status_t;
 
 /* Exported constants --------------------------------------------------------*/
+UART_HandleTypeDef huart2;
 
 /* Exported macro ------------------------------------------------------------*/
 
