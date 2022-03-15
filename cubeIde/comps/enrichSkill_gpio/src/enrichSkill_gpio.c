@@ -1,5 +1,7 @@
 #include <enrichSkill_gpio.h>
 #include "stm32f4xx_hal.h"
+#include "FreeRTOS.h"
+#include "task.h"
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -38,4 +40,12 @@ void enrichSkill_gpio_init()
 	HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 }
 
+void enrichSkill_gpio_led_hanlder(void * params)
+{
+	while(1)
+	{
+		HAL_GPIO_TogglePin(GPIOA, 1u << 5u);
+		vTaskDelay(pdMS_TO_TICKS(1000u));
+	}
+}
 

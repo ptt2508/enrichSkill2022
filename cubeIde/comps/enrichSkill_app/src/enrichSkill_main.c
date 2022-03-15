@@ -1,11 +1,14 @@
 #include <enrichSkill_main.h>
-#include "string.h"
+#include <string.h>
+#include <stdbool.h>
 
 #include "enrichSkill_uart.h"
 #include "enrichSkill_gpio.h"
 #include "enrichSkill_timer.h"
 #include "enrichSkill_clock.h"
+
 #include "FreeRTOS.h"
+#include "task.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef enum
@@ -18,8 +21,7 @@ typedef enum
 
 typedef enum
 {
-	ENRICHSKILL_APP_INIT_OK,
-	ENRICHSKILL_APP_INIT_FAIL,
+	ENRICHSKILL_APP_INIT_OK, ENRICHSKILL_APP_INIT_FAIL,
 } enrichSkillApp_Init_Stat_t;
 
 /* Private define ------------------------------------------------------------*/
@@ -33,6 +35,8 @@ enrichSkillApp_State_t sEnrichSkill_App_State = ENRICHSKILL_APP_IDLE;
 /* Private function prototypes -----------------------------------------------*/
 static void enrichSKill_app_errorHandler(void);
 static enrichSkillApp_Init_Stat_t enrichSkill_app_init(void);
+static bool enrichSkill_app_register_tasks(void);
+static void enrichSkill_app_main_handler(void *param);
 
 /**
  * @brief  The application entry point.
@@ -40,40 +44,28 @@ static enrichSkillApp_Init_Stat_t enrichSkill_app_init(void);
  */
 int enrichSkill_main(void)
 {
-	BaseType_t taskStat = pdPASS;
 	/* Initialize system */
 	if (enrichSkill_app_init() == ENRICHSKILL_APP_INIT_FAIL)
 	{
 		sEnrichSkill_App_State = ENRICHSKILL_APP_ERROR;
+		enrichSKill_app_errorHandler();
 	}
 	/* Send welcome message */
 	enrichSkill_uart_send_msg((uint8_t*) &sWelcomeMsg[0u],
 			strlen((const char*) &sWelcomeMsg[0u]));
 	/* Register tasks */
-//	taskStat = xTaskCreate(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask);
-//	if (pdFAIL == taskStat)
-//	{
-//		enrichSKill_app_errorHandler();
-//	}
+	if (false == enrichSkill_app_register_tasks())
+	{
+		sEnrichSkill_App_State = ENRICHSKILL_APP_ERROR;
+		enrichSKill_app_errorHandler();
+	}
+	/* Start the scheduler */
+	vTaskStartScheduler();
+
 	/* Infinite loop */
 	while (1)
 	{
-		HAL_GPIO_TogglePin(GPIOA, 1 << 5);
-		HAL_Delay(500);
-		switch (sEnrichSkill_App_State)
-		{
-		case ENRICHSKILL_APP_IDLE:
-			break;
-		case ENRICHSKILL_APP_CAPTURE_DATA:
-			break;
-		case ENRICHSKILL_APP_MOTOR_OBSERVER:
-			break;
-		case ENRICHSKILL_APP_ERROR:
-			enrichSKill_app_errorHandler();
-			break;
-		default:
-			break;
-		}
+
 	}
 }
 
@@ -120,4 +112,53 @@ static enrichSkillApp_Init_Stat_t enrichSkill_app_init(void)
 	return retVal;
 }
 
+static bool enrichSkill_app_register_tasks(void)
+{
+	bool retVal = true;
+	BaseType_t taskStat = pdPASS;
+	TaskHandle_t enrichSkill_app_mainHandler;
+	TaskHandle_t ledHandle;
+
+	/* Main application task */
+	taskStat = xTaskCreate(enrichSkill_app_main_handler, "Application handler", 200,
+			NULL, 2, &enrichSkill_app_mainHandler);
+	if (pdFAIL == taskStat)
+	{
+		retVal = false;
+	}
+	/* LED handler task */
+	if (pdPASS == taskStat)
+	{
+		taskStat = xTaskCreate(enrichSkill_gpio_led_hanlder, "LED handler", 200,
+				NULL, 2, &ledHandle);
+		if (pdFAIL == taskStat)
+		{
+			retVal = false;
+		}
+	}
+	/*  */
+
+	return retVal;
+}
+
+static void enrichSkill_app_main_handler(void *param)
+{
+	while (1)
+	{
+		switch (sEnrichSkill_App_State)
+		{
+		case ENRICHSKILL_APP_IDLE:
+			break;
+		case ENRICHSKILL_APP_CAPTURE_DATA:
+			break;
+		case ENRICHSKILL_APP_MOTOR_OBSERVER:
+			break;
+		case ENRICHSKILL_APP_ERROR:
+			enrichSKill_app_errorHandler();
+			break;
+		default:
+			break;
+		}
+	}
+}
 
