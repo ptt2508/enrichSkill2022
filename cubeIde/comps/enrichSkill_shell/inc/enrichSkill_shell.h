@@ -3,7 +3,9 @@
 #define __ES_SHELL_H
 
 /* Includes ------------------------------------------------------------------*/
-
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "stdbool.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -14,7 +16,15 @@
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
+bool enrichSkill_shell_init(void);
+void enrichSkill_shell_print_handle(void *params);
+void enrichSkill_shell_help_handle(void *params);
+void enrichSkill_shell_capture_data_hanle(void *params);
+void enrichSkill_shell_motor_observer_handle(void *params);
 
-/* Private defines -----------------------------------------------------------*/
+/* Exported variables -----------------------------------------------------------*/
+extern QueueHandle_t gEnrichSkill_shell_queue;
+extern TaskHandle_t gEnrichSkill_shell_help_handle;
+extern TaskHandle_t gEnrichSkill_shell_print_handle;
 
 #endif /* __ES_SHELL_H */
