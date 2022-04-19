@@ -4,6 +4,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "task.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -34,6 +37,9 @@ enrichSkill_uart_status_t enrichSkill_uart_init();
  * @retval None
  */
 void enrichSkill_uart_send_msg(uint8_t *msg, uint16_t size);
+
+/* Exported variables --------------------------------------------------------*/
+extern TaskHandle_t genrichSkill_uart_cmdHandle;
 
 /* Private defines -----------------------------------------------------------*/
 #define USART_TX_Pin GPIO_PIN_2

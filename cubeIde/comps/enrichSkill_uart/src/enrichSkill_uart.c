@@ -1,19 +1,15 @@
 #include <enrichSkill_uart.h>
-#include "FreeRTOS.h"
-#include "queue.h"
+#include <enrichSkill_cmd.h>
 
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define ENRICHSKILL_UART_QUEUE_DATA_SIZE 20u
-#define ENRICHSKILL_UART_QUEUE_PRINT_SIZE 20u
 
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
 static uint8_t sEnrichSkill_uart_recv_data;
-static QueueHandle_t sEnrichSkill_uart_queue_data;
-static QueueHandle_t sEnrichSkill_uart_queue_print;
+QueueHandle_t gEnrichSkill_cmd_queue;
 
 /* Private function prototypes -----------------------------------------------*/
 static void enrichSkill_uart_recv_callback(void);
@@ -30,8 +26,6 @@ enrichSkill_uart_status_t enrichSkill_uart_init()
 	huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	huart2.Init.OverSampling = UART_OVERSAMPLING_16;
 	sEnrichSkill_uart_recv_data = 0u;
-	sEnrichSkill_uart_queue_data = NULL;
-	sEnrichSkill_uart_queue_print = NULL;
 
 	if (HAL_OK != HAL_UART_Init(&huart2))
 	{
@@ -46,26 +40,6 @@ enrichSkill_uart_status_t enrichSkill_uart_init()
 		retVal = ENRICHSKILL_UART_FAIL;
 	}
 
-	/* Create data queue */
-	if (ENRICHSKILL_UART_OK == retVal)
-	{
-		sEnrichSkill_uart_queue_data = xQueueCreate(
-				ENRICHSKILL_UART_QUEUE_DATA_SIZE, sizeof(uint8_t));
-		if (NULL != sEnrichSkill_uart_queue_data)
-		{
-			sEnrichSkill_uart_queue_print = xQueueCreate(
-					ENRICHSKILL_UART_QUEUE_PRINT_SIZE, sizeof(uint8_t));
-			if (NULL == sEnrichSkill_uart_queue_print)
-			{
-				retVal = ENRICHSKILL_UART_FAIL;
-			}
-		}
-		else
-		{
-			retVal = ENRICHSKILL_UART_FAIL;
-		}
-	}
-
 	/* Wait for user to enter data */
 	if (ENRICHSKILL_UART_OK == retVal)
 	{
@@ -77,16 +51,16 @@ enrichSkill_uart_status_t enrichSkill_uart_init()
 
 void enrichSkill_uart_send_msg(uint8_t *msg, uint16_t size)
 {
-	HAL_UART_Transmit(&huart2, msg, size, 100);
+	HAL_UART_Transmit(&huart2, msg, size, HAL_MAX_DELAY);
 }
 
 static void enrichSkill_uart_recv_callback(void)
 {
 	uint8_t dummy;
-	if (!xQueueIsQueueFullFromISR(sEnrichSkill_uart_queue_data))
+	if (!xQueueIsQueueFullFromISR(gEnrichSkill_cmd_queue))
 	{
 		/* Enqueue data byte */
-		xQueueSendFromISR(sEnrichSkill_uart_queue_data,
+		xQueueSendFromISR(gEnrichSkill_cmd_queue,
 				(void* ) &sEnrichSkill_uart_recv_data, NULL);
 	}
 	else
@@ -94,9 +68,9 @@ static void enrichSkill_uart_recv_callback(void)
 		if ('\n' == sEnrichSkill_uart_recv_data)
 		{
 			/* Make sure that last data byte of queue is '\n' */
-			xQueueCRReceiveFromISR(sEnrichSkill_uart_queue_data, (void*) &dummy,
+			xQueueReceiveFromISR(gEnrichSkill_cmd_queue, (void*) &dummy,
 					NULL);
-			xQueueSendFromISR(sEnrichSkill_uart_queue_data,
+			xQueueSendFromISR(gEnrichSkill_cmd_queue,
 					(void* ) &sEnrichSkill_uart_recv_data, NULL);
 		}
 	}
@@ -104,7 +78,7 @@ static void enrichSkill_uart_recv_callback(void)
 	/* Send notification to command handling task if user enter '\n' */
 	if ('\n' == sEnrichSkill_uart_recv_data)
 	{
-//		xTaskNotifyFromISR()
+		xTaskNotifyFromISR(genrichSkill_uart_cmdHandle, 0, eNoAction, NULL);
 	}
 
 	HAL_UART_Receive_IT(&huart2, &sEnrichSkill_uart_recv_data, 1u);
