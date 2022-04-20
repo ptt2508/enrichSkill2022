@@ -1,28 +1,30 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ES_MAIN_H
-#define __ES_MAIN_H
+#ifndef __ES_UTIL_H
+#define __ES_UTIL_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stdint.h"
 
 /* Private includes ----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-typedef enum
-{
-	ENRICHSKILL_APP_IDLE,
-	ENRICHSKILL_APP_CAPTURE_DATA,
-	ENRICHSKILL_APP_MOTOR_OBSERVER,
-	ENRICHSKILL_APP_ERROR
-} enrichSkillApp_State_t;
 
 /* Exported constants --------------------------------------------------------*/
 
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
-void enrichSkill_app_setAppState(enrichSkillApp_State_t state);
+/**
+ * @brief
+ * @param
+ * @retval
+ */
+void enrichSKill_util_memSet(uint8_t *buff, uint8_t size, uint8_t data);
+void enrichSkill_util_memcpy(uint8_t *src, uint8_t *dst, uint16_t size);
+
+
+/* Exported variables --------------------------------------------------------*/
 
 /* Private defines -----------------------------------------------------------*/
 
-#endif /* __ES_MAIN_H */
+#endif /* __ES_UTIL_H */

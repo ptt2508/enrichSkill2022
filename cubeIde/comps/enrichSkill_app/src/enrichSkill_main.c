@@ -9,18 +9,13 @@
 #include "enrichSkill_clock.h"
 #include "enrichSkill_cmd.h"
 #include "enrichSkill_shell.h"
+#include "enrichSkill_motor_observer.h"
+#include "enrichSkill_util.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
 
 /* Private typedef -----------------------------------------------------------*/
-typedef enum
-{
-	ENRICHSKILL_APP_IDLE,
-	ENRICHSKILL_APP_CAPTURE_DATA,
-	ENRICHSKILL_APP_MOTOR_OBSERVER,
-	ENRICHSKILL_APP_ERROR
-} enrichSkillApp_State_t;
 
 typedef enum
 {
@@ -36,7 +31,7 @@ static uint8_t sWelcomeMsg[20] = "EnrichSkill22\n\r";
 enrichSkillApp_State_t sEnrichSkill_App_State = ENRICHSKILL_APP_IDLE;
 TaskHandle_t senrichSkill_app_main_taskHandle;
 TaskHandle_t genrichSkill_uart_cmdHandle;
-TaskHandle_t gEnrichSkill_shell_help_handle;
+TaskHandle_t sEnrichSkill_motor_observer_mainHandle;
 TaskHandle_t gEnrichSkill_shell_print_handle;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -52,7 +47,7 @@ static void enrichSkill_app_main_handler(void *param);
 int enrichSkill_main(void)
 {
 	/* Initialize system */
-	if (enrichSkill_app_init() == ENRICHSKILL_APP_INIT_FAIL)
+ 	if (enrichSkill_app_init() == ENRICHSKILL_APP_INIT_FAIL)
 	{
 		sEnrichSkill_App_State = ENRICHSKILL_APP_ERROR;
 		enrichSKill_app_errorHandler();
@@ -66,6 +61,9 @@ int enrichSkill_main(void)
 		sEnrichSkill_App_State = ENRICHSKILL_APP_ERROR;
 		enrichSKill_app_errorHandler();
 	}
+
+	/* Suspend unused tasks */
+	vTaskSuspend(sEnrichSkill_motor_observer_mainHandle);
 
 	/* Start the scheduler */
 	vTaskStartScheduler();
@@ -139,8 +137,8 @@ static bool enrichSkill_app_register_tasks(void)
 	TaskHandle_t ledHandle;
 
 	/* Main application task */
-	taskStat = xTaskCreate(enrichSkill_app_main_handler, "Application handler",
-			200, NULL, 2, &senrichSkill_app_main_taskHandle);
+	taskStat = xTaskCreate(enrichSkill_app_main_handler, "App handler",
+			250, NULL, 2, &senrichSkill_app_main_taskHandle);
 	if (pdFAIL == taskStat)
 	{
 		retVal = false;
@@ -148,7 +146,7 @@ static bool enrichSkill_app_register_tasks(void)
 	/* LED handler task */
 	if (pdPASS == taskStat)
 	{
-		taskStat = xTaskCreate(enrichSkill_gpio_led_hanlder, "LED handler", 200,
+		taskStat = xTaskCreate(enrichSkill_gpio_led_hanlder, "LED handler", 250,
 		NULL, 2, &ledHandle);
 		if (pdFAIL == taskStat)
 		{
@@ -159,7 +157,7 @@ static bool enrichSkill_app_register_tasks(void)
 	/* cmd handler task */
 	if (pdPASS == taskStat)
 	{
-		taskStat = xTaskCreate(enrichSkill_cmd_cmd_handle, "Cmd handler", 200,
+		taskStat = xTaskCreate(enrichSkill_cmd_cmd_handle, "Cmd handler", 250,
 		NULL, 2, &genrichSkill_uart_cmdHandle);
 		if (pdFAIL == taskStat)
 		{
@@ -171,18 +169,18 @@ static bool enrichSkill_app_register_tasks(void)
 	if (pdPASS == taskStat)
 	{
 		taskStat = xTaskCreate(enrichSkill_shell_print_handle, "Shell print",
-				200, NULL, 2, &gEnrichSkill_shell_print_handle);
+				300, NULL, 2, &gEnrichSkill_shell_print_handle);
 		if (pdFAIL == taskStat)
 		{
 			retVal = false;
 		}
 	}
 
-	/* shell help task */
+	/* motor observer task */
 	if (pdPASS == taskStat)
 	{
-		taskStat = xTaskCreate(enrichSkill_shell_help_handle, "Shell help", 200,
-		NULL, 2, &gEnrichSkill_shell_help_handle);
+		taskStat = xTaskCreate(enrichSkill_motor_observer_main_handle, "use case 1", 300,
+		NULL, 2, &sEnrichSkill_motor_observer_mainHandle);
 		if (pdFAIL == taskStat)
 		{
 			retVal = false;
@@ -194,15 +192,27 @@ static bool enrichSkill_app_register_tasks(void)
 
 static void enrichSkill_app_main_handler(void *param)
 {
+
 	while (1)
 	{
 		switch (sEnrichSkill_App_State)
 		{
 		case ENRICHSKILL_APP_IDLE:
+			if (enrichSkill_motor_observer_isUcRunning())
+			{
+				vTaskSuspend(sEnrichSkill_motor_observer_mainHandle);
+				enrichSkill_motor_observer_setUcRunningStat(false);
+				enrichSkill_shell_exit_uc();
+			}
 			break;
 		case ENRICHSKILL_APP_CAPTURE_DATA:
 			break;
 		case ENRICHSKILL_APP_MOTOR_OBSERVER:
+			if (!enrichSkill_motor_observer_isUcRunning())
+			{
+				vTaskResume(sEnrichSkill_motor_observer_mainHandle);
+				enrichSkill_motor_observer_setUcRunningStat(true);
+			}
 			break;
 		case ENRICHSKILL_APP_ERROR:
 			enrichSKill_app_errorHandler();
@@ -211,5 +221,10 @@ static void enrichSkill_app_main_handler(void *param)
 			break;
 		}
 	}
+}
+
+void enrichSkill_app_setAppState(enrichSkillApp_State_t state)
+{
+	sEnrichSkill_App_State = state;
 }
 
