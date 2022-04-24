@@ -1,28 +1,24 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ES_MAIN_H
-#define __ES_MAIN_H
+#ifndef __ES_MOTOR_OBSERVER_H
+#define __ES_MOTOR_OBSERVER_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stdbool.h"
 
 /* Private includes ----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-typedef enum
-{
-	ENRICHSKILL_APP_IDLE,
-	ENRICHSKILL_APP_CAPTURE_DATA,
-	ENRICHSKILL_APP_MOTOR_OBSERVER,
-	ENRICHSKILL_APP_ERROR
-} enrichSkillApp_State_t;
 
 /* Exported constants --------------------------------------------------------*/
 
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
-void enrichSkill_app_setAppState(enrichSkillApp_State_t state);
+void enrichSkill_motor_observer_init(void);
+void enrichSkill_motor_observer_setUcRunningStat(bool runStat);
+void enrichSkill_motor_observer_main_handle(void *params);
+bool enrichSkill_motor_observer_isUcRunning(void);
 
-/* Private defines -----------------------------------------------------------*/
 
-#endif /* __ES_MAIN_H */
+
+#endif /* __ES_MOTOR_OBSERVER_H */

@@ -18,9 +18,10 @@
 /* Exported functions prototypes ---------------------------------------------*/
 bool enrichSkill_shell_init(void);
 void enrichSkill_shell_print_handle(void *params);
-void enrichSkill_shell_help_handle(void *params);
-void enrichSkill_shell_capture_data_hanle(void *params);
-void enrichSkill_shell_motor_observer_handle(void *params);
+void enrichSkill_shell_send_to_print_queue(uint8_t msg[], uint16_t len);
+void enrichSkill_shell_help(void);
+void enrichSkill_shell_exit_uc();
+void enrichSkill_shell_unsupported_cmd();
 
 /* Exported variables -----------------------------------------------------------*/
 extern QueueHandle_t gEnrichSkill_shell_queue;

@@ -1,4 +1,7 @@
 #include "enrichSkill_cmd.h"
+#include "enrichSkill_main.h"
+#include "enrichSkill_util.h"
+#include "enrichSkill_shell.h"
 #include "string.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -23,7 +26,6 @@ TaskHandle_t gEnrichSkill_shell_help_handle;
 
 /* Private function prototypes -----------------------------------------------*/
 static void enrichSkill_cmd_process(enrichSkill_cmd_cmd_t *cmd);
-static void enrichSKill_cmd_memSet(uint8_t *buff, uint8_t size, uint8_t data);
 
 bool enrichSkill_cmd_init(void)
 {
@@ -50,7 +52,7 @@ void enrichSkill_cmd_cmd_handle(void *params)
 		ret = xTaskNotifyWait(0, 0, NULL, portMAX_DELAY);
 		if (pdTRUE == ret)
 		{
-			enrichSKill_cmd_memSet(cmd.payload, ENRICHSKILL_CMD_PAYLOAD_SIZE,
+			enrichSKill_util_memSet(cmd.payload, ENRICHSKILL_CMD_PAYLOAD_SIZE,
 					0u);
 			cmd.length = 0u;
 			/* Process command */
@@ -60,17 +62,20 @@ void enrichSkill_cmd_cmd_handle(void *params)
 				switch (cmd.cmdCode)
 				{
 				case ENRICHSKILL_CMD_CODE_HELP:
-					xTaskNotify(gEnrichSkill_shell_help_handle, 0, eNoAction);
+					enrichSkill_shell_help();
 					break;
 				case ENRICHSKILL_CMD_CODE_UC1:
+					enrichSkill_app_setAppState(ENRICHSKILL_APP_MOTOR_OBSERVER);
 					break;
 				case ENRICHSKILL_CMD_CODE_UC2:
 					break;
 				case ENRICHSKILL_CMD_CODE_SET_SPEED:
 					break;
 				case ENRICHSKILL_CMD_CODE_EXIT:
+					enrichSkill_app_setAppState(ENRICHSKILL_APP_IDLE);
 					break;
 				default:
+					enrichSkill_shell_unsupported_cmd();
 					break;
 				}
 			}
@@ -111,16 +116,11 @@ static void enrichSkill_cmd_process(enrichSkill_cmd_cmd_t *cmd)
 					break;
 				}
 			}
+
+			if (i == ENRICHSKILL_CMD_CMD_LIST_SIZE)
+			{
+				cmd->cmdCode = ENRICHSKILL_CMD_CODE_NOT_SUPPORT;
+			}
 		}
-	}
-}
-
-static void enrichSKill_cmd_memSet(uint8_t *buff, uint8_t size, uint8_t data)
-{
-	uint8_t idx = 0u;
-
-	for (idx = 0u; idx < size; idx++)
-	{
-		buff[idx] = data;
 	}
 }

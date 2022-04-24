@@ -61,6 +61,8 @@
 									<listOptionValue builtIn="false" value="../../external/freertos/include"/>
 									<listOptionValue builtIn="false" value="../../external/freertos/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_cmd/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_util/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_motor_observer/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1636209349" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -118,6 +120,8 @@
 									<listOptionValue builtIn="false" value="../../external/freertos/include"/>
 									<listOptionValue builtIn="false" value="../../external/freertos/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_cmd/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_util/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_motor_observer/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1932688255" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -202,6 +206,8 @@
 									<listOptionValue builtIn="false" value="../../external/freertos/include"/>
 									<listOptionValue builtIn="false" value="../../external/freertos/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_cmd/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_util/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_motor_observer/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.736516523" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -258,6 +264,8 @@
 									<listOptionValue builtIn="false" value="../../external/freertos/include"/>
 									<listOptionValue builtIn="false" value="../../external/freertos/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../../comps/enrichSkill_cmd/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_util/inc"/>
+									<listOptionValue builtIn="false" value="../../comps/enrichSkill_motor_observer/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.2003843119" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

@@ -18,6 +18,7 @@
 #define ENRICHSKILL_CMD_CODE_UC2 			2u
 #define ENRICHSKILL_CMD_CODE_SET_SPEED 		3u
 #define ENRICHSKILL_CMD_CODE_EXIT 			4u
+#define ENRICHSKILL_CMD_CODE_NOT_SUPPORT	5u
 
 /* Exported types ------------------------------------------------------------*/
 typedef struct
